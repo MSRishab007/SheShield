@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gesture Detection</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Load static files -->
+    {% load static %}
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/shlogo.png' %}"/>
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        nav {
+            z-index: 999;
+            position: sticky;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 13px 100px;
+            transition: 0.3s ease;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo img {
+            height: 53px;
+        }
+
+        .menu {
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .menu li {
+            margin-left: 25px;
+        }
+
+        .menu li a {
+            color: #000000;
+            text-decoration: none;
+            position: relative;
+            transition: color 0.7s;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            font-weight: 500;
+            letter-spacing: 1px;
+            padding: 0px 22px;
+            line-height: 35px;
+            height: 35px;
+        }
+
+        .menu li a:hover {
+            color: #fca5f1;
+        }
+
+        .menu li a::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: #fca5f1;
+            bottom: -5px;
+            left: 0;
+            transform: scaleX(0);
+            transition: transform 0.5s;
+        }
+
+        .menu li a:hover::before {
+            transform: scaleX(1);
+        }
+
+        .upload-container {
+            background-color: #fff;
+            padding: 40px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            margin: auto;
+            margin-bottom: 300px;
+            flex: 1;
+            margin-top: 20px; /* Added margin for spacing from nav */
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .file-input-container {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: #f9f9f9;
+            position: relative;
+            transition: border-color 0.3s ease;
+            width: 100%;
+        }
+
+        .file-input-container:hover {
+            border-color: #007bff;
+        }
+
+        .file-input-container.drag-over {
+            border-color: #007bff;
+            background-color: #e9f7ff;
+        }
+
+        .file-input-container input[type="file"] {
+            display: none;
+        }
+
+        .file-input-container .file-text {
+            color: #666;
+            font-size: 16px;
+            pointer-events: none;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            font-size: 18px;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            box-sizing: border-box; /* Ensure padding is included in width */
+        }
+
+        button[type="submit"]:hover {
+            background-color: #ed0606;
+        }
+
+        .form-errors {
+            color: #d9534f;
+            font-size: 14px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
+        .left {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 300px; /* Adjust size as needed */
+        }
+
+        .right {
+            position: absolute;
+            bottom: -15px;
+            right: 0;
+            width: 300px; /* Adjust size as needed */
+            transform: rotate(270deg);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation bar -->
+    <nav>
+        <a href="{% url 'home' %}" class="logo">
+            <img src="{% static 'images/logo.png' %}" alt="Logo">
+        </a>
+        <ul class="menu">
+            <li><a href='gender'>VIDEO</a></li>
+            <li><a href='gesture/'>GESTURE</a></li>
+            <li><a href='dashboard/'>DASHBOARD</a></li>
+            <li><a href='map/'>HOTSPOTS</a></li>
+            <li><a href="#Contact">CONTACT US</a></li>
+        </ul>
+    </nav>
+
+    <!-- Upload Form -->
+    <div class="upload-container">
+        <h1>Gesture Detection</h1>
+
+        <form action="{% url 'gesture' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Drag and Drop Zone -->
+            <div class="file-input-container" id="file-drop-zone">
+                <p class="file-text" id="file-text">Drag & Drop your video file here or click to choose</p>
+                <input type="file" id="file-input" name="video_file" accept="video/mp4">
+            </div>
+
+            <!-- Show form errors, if any -->
+            {% if form.errors %}
+                <div class="form-errors">
+                    <p>Please fix the following errors:</p>
+                    {{ form.errors.as_ul }}
+                </div>
+            {% endif %}
+
+            <button type="submit">Process</button>
+        </form>
+    </div>
+    <img src="{% static 'images/left.png' %}" class="left" alt="Left Image">
+    <img src="{% static 'images/left.png' %}" class="right" alt="Right Image">
+    <!-- JavaScript for drag-and-drop -->
+    <script>
+        // Select the drop zone and file input elements
+        const fileDropZone = document.getElementById('file-drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const fileText = document.getElementById('file-text');
+
+        // Handle click on the drop zone to trigger the file input
+        fileDropZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Update the file input when a file is selected via click
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                fileText.textContent = fileInput.files[0].name;
+            }
+        });
+
+        // Handle drag-and-drop functionality
+        fileDropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileDropZone.classList.add('drag-over');
+        });
+
+        fileDropZone.addEventListener('dragleave', () => {
+            fileDropZone.classList.remove('drag-over');
+        });
+
+        fileDropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileDropZone.classList.remove('drag-over');
+
+            if (e.dataTransfer.files.length > 0) {
+                fileInput.files = e.dataTransfer.files;
+                fileText.textContent = e.dataTransfer.files[0].name;
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danger Areas Map</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Apply background color and global font styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #2c3e50;
+            text-align: center;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .map-container {
+            margin-top: 20px;
+            width: 80%;
+            max-width: 1200px;
+            border: 2px solid #2c3e50;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Style for the map */
+        #map {
+            width: 100%;
+            height: 600px;
+        }
+
+        /* Back button */
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #2980b9;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1.1em;
+            transition: background-color 0.3s;
+        }
+
+        .back-btn:hover {
+            background-color: #3498db;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .map-container {
+                width: 90%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1><i class="fas fa-map-marker-alt"></i> Danger Areas Map</h1>
+    
+    <div class="map-container">
+        <!-- Map will be displayed here -->
+        <div id="map">
+            {{ map_html|safe }}
+        </div>
+    </div>
+        
+    <!-- Optional back button to navigate to the previous page -->
+    <a href="/" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Home</a>
+</body>
+</html>

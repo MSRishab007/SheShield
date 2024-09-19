@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SheShield</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css">
+  <!-- Load the static files -->
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="shortcut icon" href="{% static 'images/shlogo.png' %}"/> 
+  <script src="https://kit.fontawesome.com/d38640634e.js" crossorigin="anonymous"></script>
+</head>
+<body>
+   <nav>
+     <!-- Link the logo to the home page -->
+     <a href="{% url 'home' %}" class="logo"><img src="{% static 'images/logo.png' %}" alt="Logo"></a>
+       <ul class="menu">
+        <li><a href="gender/">VIDEO</a></li>
+        <li><a href="gesture/">GESTURE</a></li>
+        <li><a href="dashboard/">DASHBOARD</a></li>
+        <li><a href="map/">HOTSPOTS</a></li>
+        <li><a href="contact/">CONTACT US</a></li>
+       </ul>
+   </nav>
+   <div class="bg">
+          <img src="{% static 'images/left.png' %}" class="left" alt="Left Image">
+          <img src="{% static 'images/left.png' %}" class="right" alt="Right Image">
+          <img src="{% static 'images/woman-illustration.png' %}" class="women" alt="Woman Illustration">
+          <img src="{% static 'images/name.png' %}" class="name" alt="Name">
+   </div>
+</body>
+</html>
